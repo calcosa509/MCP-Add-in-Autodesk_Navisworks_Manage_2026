@@ -1,17 +1,17 @@
 {
   "dxt_version": "0.1",
-  "name": "waabe-navisworks-mcp",
+  "name": "navisworks-mcp-coordination",
   "version": "1.0.0",
-  "description": "Navisworks Manage 2026 MCP Server for element queries and model analysis. ",
+  "description": "Navisworks Manage 2026 MCP – Coordination, clash detection and model analysis for construction projects.",
   "author": {
-    "name": "WAABE",
-    "email": "n.rube@waabe.com",
-    "url": "https://www.waabe.com"
+    "name": "Calvens Joseph",
+    "email": "contact@calvensjoseph.com",
+    "url": "https://github.com/calcosa509"
   },
   "license": "MIT",
-  "homepage": "https://www.waabe.com",
-  "documentation": "https://github.com/kikki/MCP-Add-in-Autodesk_Navisworks_Manage_2026",
-  "support": "https://github.com/kikki/MCP-Add-in-Autodesk_Navisworks_Manage_2026",
+  "homepage": "https://github.com/calcosa509/MCP-Add-in-Autodesk_Navisworks_Manage_2026",
+  "documentation": "https://github.com/calcosa509/MCP-Add-in-Autodesk_Navisworks_Manage_2026",
+  "support": "https://github.com/calcosa509/MCP-Add-in-Autodesk_Navisworks_Manage_2026",
   "icon": "icon.png",
 
   "server": {
@@ -19,69 +19,116 @@
     "entry_point": "server/index.js",
     "mcp_config": {
       "command": "node",
-      "args": [ "${__dirname}/server/index.js" ],
+      "args": ["${__dirname}/server/index.js"],
       "env": {
         "NAVISWORKS_API_PORT": "${user_config.api_port}"
       }
     }
   },
 
-  "user_config": {
-    "api_port": {
-      "type": "string",
-      "title": "Navisworks API Port",
-      "description": "Port des Navisworks MCP Servers (Standard: 1234)",
-      "default": "1234",
-      "required": true
-    }
-  },
-
   "tools": [
     {
-      "name": "get_model_overview",
-      "description": "Provides an overview of the loaded model (models, histogram, total)."
+      "name": "get_model_info",
+      "description": "Get basic information about the active Navisworks model.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
     },
     {
-      "name": "get_element_count_by_category",
-      "description": "Number of elements per category (e.g., Doors/Windows/IfcSpace). Input: category, scope."
+      "name": "list_items_by_discipline",
+      "description": "List model items grouped by discipline (Architecture, Structure, MEP).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "discipline": {
+            "type": "string",
+            "enum": ["Architecture", "Structure", "MEP"]
+          }
+        },
+        "required": ["discipline"]
+      }
     },
     {
-      "name": "list_properties_for_item",
-      "description": "all Properties of an item. Input: canonical_id."
+      "name": "get_item_properties",
+      "description": "Retrieve properties of a specific model item.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Unique identifier of the Navisworks model item."
+          }
+        },
+        "required": ["item_id"]
+      }
     },
     {
-      "name": "get_property_distribution_by_category",
-      "description": "Provides a complete overview of all models loaded in Navisworks with their property categories and the properties they contain"
+      "name": "run_clash_test",
+      "description": "Run a predefined clash test between two disciplines.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "discipline_a": {
+            "type": "string",
+            "enum": ["Architecture", "Structure", "MEP"]
+          },
+          "discipline_b": {
+            "type": "string",
+            "enum": ["Architecture", "Structure", "MEP"]
+          }
+        },
+        "required": ["discipline_a", "discipline_b"]
+      }
     },
     {
-      "name": "list_items_to_property",
-      "description": "Lists items by category/property; optional model/value filter. scope AND modelFilter accept IDs or model names; multiple via , ; \\n. Input: category, property, scope, modelFilter?, valueFilter?, ignoreCase?, maxResults?"
+      "name": "get_clash_results",
+      "description": "Retrieve all detected clashes from the last clash test.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
     },
     {
-      "name": "clear_selection",
-      "description": "Clears selection (guarded)."
+      "name": "get_critical_clashes",
+      "description": "Retrieve only critical clashes based on severity and tolerance.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["High", "Critical"]
+          }
+        },
+        "required": ["severity"]
+      }
     },
     {
-      "name": "get_current_selection_snapshot",
-      "description": "Current selection (IDs/handles, sample paths)."
+      "name": "summarize_clashes_for_meeting",
+      "description": "Generate a coordination-friendly summary of clashes for meetings.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
     },
     {
-      "name": "apply_selection",
-      "description": "Sets selection. Input: canonical_id[]."
-    },
-    {
-      "name": "run_simple_clash",
-      "description": "Simple hard clash: scopeA vs. scopeB; optional tolerance_m, test_name. Input: canonical_id[]."
-    },
-    {
-      "name": "get_units_and_tolerances",
-      "description": "Length/area/volume units + tolerances."
+      "name": "compare_clash_reports",
+      "description": "Compare two clash reports and identify progress or regressions.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "previous_report_id": {
+            "type": "string"
+          },
+          "current_report_id": {
+            "type": "string"
+          }
+        },
+        "required": ["previous_report_id", "current_report_id"]
+      }
     }
-
-
-  ],
-
-  "prompts": [
-
   ]
 }
