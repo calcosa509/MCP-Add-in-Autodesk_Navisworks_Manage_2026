@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\ButtonHandlerFactory.cs" />
+    <Compile Include="Commands\GetModelInfoCommand.cs" />
     <Compile Include="Commands\MCPButtonHandler.cs" />
     <Compile Include="Commands\MCPServerButtonHandler.cs" />
     <Compile Include="Helpers\ButtonsXmlLoader.cs" />

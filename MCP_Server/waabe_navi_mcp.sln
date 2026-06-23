@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11903.348
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "waabe_navi", "waabe_navi_mcp\waabe_navi.csproj", "{0831E15B-8602-4DFC-9A54-03E741F7B042}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,6 +11,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "waabe_navi_shared", "waabe_navi_shared\waabe_navi_shared.csproj", "{8BDF856D-859E-4762-AFE2-048CACEAEB7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "waabe_navi_mcp_server", "waabe_navi_mcp_server\waabe_navi_mcp_server.csproj", "{8F649E51-8419-4A07-8885-AA766FA96452}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCP_Launcher", "MCP_Launcher\MCP_Launcher.csproj", "{0669815C-6387-4473-A51F-85FBB1FE4048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Waabe.Navisworks.Bridge", "Waabe.Navisworks.Bridge\Waabe.Navisworks.Bridge.csproj", "{31054ABE-48DF-4AB5-B3BA-FDA29489A334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +48,22 @@ Global
 		{8F649E51-8419-4A07-8885-AA766FA96452}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F649E51-8419-4A07-8885-AA766FA96452}.Release|x64.ActiveCfg = Release|Any CPU
 		{8F649E51-8419-4A07-8885-AA766FA96452}.Release|x64.Build.0 = Release|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Debug|x64.Build.0 = Debug|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Release|x64.ActiveCfg = Release|Any CPU
+		{0669815C-6387-4473-A51F-85FBB1FE4048}.Release|x64.Build.0 = Release|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Debug|x64.Build.0 = Debug|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Release|x64.ActiveCfg = Release|Any CPU
+		{31054ABE-48DF-4AB5-B3BA-FDA29489A334}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

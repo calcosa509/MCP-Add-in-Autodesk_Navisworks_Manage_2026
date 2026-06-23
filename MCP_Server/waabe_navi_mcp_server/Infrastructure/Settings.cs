@@ -9,9 +9,9 @@
     {
         /// <summary>
         /// Default timeout (in milliseconds) for async operations such as queries and service calls.
-        /// Example: 10000 = 10 seconds.
+        /// Increased to 60s to handle large models (50 000+ elements) without cancellation.
         /// </summary>
-        public const int DefaultTimeoutMs = 10000;
+        public const int DefaultTimeoutMs = 60000;
 
         /// <summary>
         /// Enables or disables the response cache globally.
