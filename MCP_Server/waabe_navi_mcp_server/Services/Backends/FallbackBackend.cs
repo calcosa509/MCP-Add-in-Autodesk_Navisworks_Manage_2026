@@ -1,4 +1,4 @@
-﻿using Autodesk.Navisworks.Api;
+using Autodesk.Navisworks.Api;
 using Autodesk.Navisworks.Api.Clash;
 using Autodesk.Navisworks.Api.ComApi;
 using Autodesk.Navisworks.Api.Controls;
@@ -53,7 +53,7 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                 var (targets, reason, steps) = ResolveGeometricTargets(it);
 
-                // FIX: si pas de géométrie trouvée (ex: racine de modèle),
+                // FIX: si pas de gÃƒÂ©omÃƒÂ©trie trouvÃƒÂ©e (ex: racine de modÃƒÂ¨le),
                 // expand tous les descendants directement
                 if (targets.Count == 0)
                 {
@@ -127,12 +127,12 @@ namespace waabe_navi_mcp_server.Services.Backends
             }
             catch (ObjectDisposedException ode)
             {
-                LogHelper.LogWarning($"[CLASH] CountClashResultsSafe: ObjectDisposed → 0 ({ode.Message})");
+                LogHelper.LogWarning($"[CLASH] CountClashResultsSafe: ObjectDisposed Ã¢â€ â€™ 0 ({ode.Message})");
                 return 0;
             }
             catch (Exception ex)
             {
-                LogHelper.LogWarning($"[CLASH] CountClashResultsSafe: exception → 0 ({ex.Message})");
+                LogHelper.LogWarning($"[CLASH] CountClashResultsSafe: exception Ã¢â€ â€™ 0 ({ex.Message})");
                 return 0;
             }
         }
@@ -198,6 +198,9 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                     dto.results = CountClashResultsSafe(added);
                     dto.message = $"ok; results={dto.results}";
+                    // Truncate details to prevent MCP_Launcher overflow
+                    if (dto.details != null && dto.details.Length > 1000)
+                        dto.details = dto.details.Substring(0, 1000) + "... [truncated]";
 
                     try
                     {
@@ -212,7 +215,10 @@ namespace waabe_navi_mcp_server.Services.Backends
                                 sb.Append("{")
                                   .AppendFormat("\"input_id\":\"{0}\",", EscapeJson(x.input_id ?? ""))
                                   .AppendFormat("\"resolved_id\":\"{0}\",", EscapeJson(x.resolved_id ?? ""))
-                                  .AppendFormat("\"applied_id\":\"{0}\",", EscapeJson(x.applied_id ?? ""))
+                                  .AppendFormat("\"element_count\":{0},", (x.applied_id ?? "").Split(new char[]{';'}, System.StringSplitOptions.None).Length)
+
+
+
                                   .AppendFormat("\"reason\":\"{0}\",", EscapeJson(x.reason ?? ""))
                                   .AppendFormat("\"element_name\":\"{0}\"", EscapeJson(x.element_name ?? ""))
                                   .Append("}");
@@ -257,7 +263,7 @@ namespace waabe_navi_mcp_server.Services.Backends
             if (doc == null || doc.Models == null)
                 return new Autodesk.Navisworks.Api.Selection(col);
 
-            // FIX: Handle "all" or empty scope → expand entire document
+            // FIX: Handle "all" or empty scope Ã¢â€ â€™ expand entire document
             var trimmedScope = (scope ?? "").Trim();
             if (string.IsNullOrEmpty(trimmedScope) ||
                 trimmedScope.Equals("all", StringComparison.OrdinalIgnoreCase))
@@ -638,9 +644,9 @@ namespace waabe_navi_mcp_server.Services.Backends
             {
                 var doc = Application.ActiveDocument;
                 if (doc == null)
-                    LogHelper.LogWarning("[FALLBACK] 🔍 Aktives Dokument: none");
+                    LogHelper.LogWarning("[FALLBACK] Ã°Å¸â€Â Aktives Dokument: none");
                 else
-                    LogHelper.LogEvent($"[FALLBACK] 🔍 Aktives Dokument: Title='{doc.Title}', File='{doc.FileName}'");
+                    LogHelper.LogEvent($"[FALLBACK] Ã°Å¸â€Â Aktives Dokument: Title='{doc.Title}', File='{doc.FileName}'");
                 return doc;
             }
             catch (Exception ex)
@@ -725,7 +731,7 @@ namespace waabe_navi_mcp_server.Services.Backends
             {
                 var models = doc.Models;
                 int mc = (models != null) ? models.Count : 0;
-                LogHelper.LogInfo($"[FALLBACK] 📦 Document.Models.Count = {mc}");
+                LogHelper.LogInfo($"[FALLBACK] Ã°Å¸â€œÂ¦ Document.Models.Count = {mc}");
 
                 Model firstModel = null;
                 if (mc > 0)
@@ -739,15 +745,15 @@ namespace waabe_navi_mcp_server.Services.Backends
                     var raw1 = !string.IsNullOrWhiteSpace(firstModel.SourceFileName) ? firstModel.SourceFileName : firstModel.FileName;
                     var ext1 = string.IsNullOrWhiteSpace(raw1) ? "" : Path.GetExtension(raw1);
                     looksLikeContainer = string.IsNullOrWhiteSpace(ext1) || IsContainerExt(ext1);
-                    LogHelper.LogInfo($"[FALLBACK] 🔎 Single model ext='{ext1}', looksLikeContainer={looksLikeContainer}");
+                    LogHelper.LogInfo($"[FALLBACK] Ã°Å¸â€Å½ Single model ext='{ext1}', looksLikeContainer={looksLikeContainer}");
                 }
 
                 if (mc > 1 || (mc == 1 && !looksLikeContainer))
                 {
-                    LogHelper.LogInfo("[FALLBACK] Branch: NWF/unsaved → iteriere doc.Models.");
+                    LogHelper.LogInfo("[FALLBACK] Branch: NWF/unsaved Ã¢â€ â€™ iteriere doc.Models.");
                     foreach (Model m in models)
                     {
-                        if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] ⏹️ Abgebrochen (CT)."); break; }
+                        if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] Ã¢ÂÂ¹Ã¯Â¸Â Abgebrochen (CT)."); break; }
 
                         var resolved = ResolveSubModelIdentity(model: m);
                         string fileOnly = resolved.fileOnly;
@@ -755,22 +761,22 @@ namespace waabe_navi_mcp_server.Services.Backends
                         string display = string.IsNullOrWhiteSpace(resolved.display) ? fileOnly : resolved.display;
 
                         display = SafeNameOrDefault(display, fileOnly, DEFAULT_UNNAMED);
-                        LogHelper.LogInfo($"[FALLBACK] 🧭 Model-Resolve: fileOnly='{fileOnly}', ext='{ext}', src={resolved.source}");
+                        LogHelper.LogInfo($"[FALLBACK] Ã°Å¸Â§Â­ Model-Resolve: fileOnly='{fileOnly}', ext='{ext}', src={resolved.source}");
 
                         if (IsContainerExt(ext))
                         {
                             results.Add((SafeNameOrDefault(fileOnly, display, DEFAULT_UNNAMED), ext, display, m.RootItem));
-                            LogHelper.LogInfo($"[FALLBACK] ➕ Container aufgenommen: '{display}' ({ext})");
+                            LogHelper.LogInfo($"[FALLBACK] Ã¢Å¾â€¢ Container aufgenommen: '{display}' ({ext})");
 
                             var children = m.RootItem?.Children;
                             int cc = (children != null) ? children.Count() : 0;
-                            LogHelper.LogInfo($"[FALLBACK]   ↳ Children Count = {cc}");
+                            LogHelper.LogInfo($"[FALLBACK]   Ã¢â€ Â³ Children Count = {cc}");
 
                             if (children != null && cc > 0)
                             {
                                 foreach (ModelItem child in children)
                                 {
-                                    if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] ⏹️ Abgebrochen (CT)."); break; }
+                                    if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] Ã¢ÂÂ¹Ã¯Â¸Â Abgebrochen (CT)."); break; }
                                     var cres = ResolveSubModelIdentity(item: child);
                                     var cdisplay = SafeNameOrDefault(cres.display, cres.fileOnly, DEFAULT_UNNAMED);
                                     results.Add((SafeNameOrDefault(cres.fileOnly, cdisplay, DEFAULT_UNNAMED), cres.ext, cdisplay, child));
@@ -784,7 +790,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 else if (mc == 1 && looksLikeContainer)
                 {
-                    LogHelper.LogInfo("[FALLBACK] Branch: NWD/NWF → iteriere RootItem.Children (Top-Level-Modelle).");
+                    LogHelper.LogInfo("[FALLBACK] Branch: NWD/NWF Ã¢â€ â€™ iteriere RootItem.Children (Top-Level-Modelle).");
                     var children = firstModel?.RootItem?.Children;
                     int childCount = (children != null) ? children.Count() : 0;
                     LogHelper.LogInfo($"[FALLBACK] RootItem.Children Count = {childCount}");
@@ -793,7 +799,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                     {
                         foreach (ModelItem child in children)
                         {
-                            if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] ⏹️ Abgebrochen (CT)."); break; }
+                            if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] Ã¢ÂÂ¹Ã¯Â¸Â Abgebrochen (CT)."); break; }
                             var resolved = ResolveSubModelIdentity(item: child);
                             var display = SafeNameOrDefault(resolved.display, resolved.fileOnly, DEFAULT_UNNAMED);
                             results.Add((SafeNameOrDefault(resolved.fileOnly, display, DEFAULT_UNNAMED), resolved.ext, display, child));
@@ -802,7 +808,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 else
                 {
-                    LogHelper.LogInfo("[FALLBACK] ℹ️ Keine Models vorhanden (doc.Models leer).");
+                    LogHelper.LogInfo("[FALLBACK] Ã¢â€žÂ¹Ã¯Â¸Â Keine Models vorhanden (doc.Models leer).");
                 }
             }
             catch (Exception ex)
@@ -851,7 +857,7 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                 bool isSaved;
                 string containerFileNameOnly = GetContainerFileNameOnly(doc, out isSaved);
-                LogHelper.LogInfo($"[FALLBACK] 🔍 Aktives Dokument: Title='{(string.IsNullOrWhiteSpace(doc.Title) ? "Unbenannt" : doc.Title)}', File='{(isSaved ? doc.FileName : "(nicht gespeichert)")}'");
+                LogHelper.LogInfo($"[FALLBACK] Ã°Å¸â€Â Aktives Dokument: Title='{(string.IsNullOrWhiteSpace(doc.Title) ? "Unbenannt" : doc.Title)}', File='{(isSaved ? doc.FileName : "(nicht gespeichert)")}'");
 
                 var subs = ScanSubModels(doc, ct, false);
 
@@ -859,7 +865,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 foreach (var sm in subs)
                 {
                     if (string.IsNullOrWhiteSpace(sm.CanonicalId))
-                        LogHelper.LogInfo("[FALLBACK] ℹ️ Keine CanonicalId verfügbar → Eintrag ist (noch) nicht selektierbar.");
+                        LogHelper.LogInfo("[FALLBACK] Ã¢â€žÂ¹Ã¯Â¸Â Keine CanonicalId verfÃƒÂ¼gbar Ã¢â€ â€™ Eintrag ist (noch) nicht selektierbar.");
 
                     list.Add(new ModelDetailDto
                     {
@@ -920,16 +926,16 @@ namespace waabe_navi_mcp_server.Services.Backends
                 {
                     var title = string.IsNullOrWhiteSpace(doc.Title) ? "Unbenannt" : doc.Title;
                     var file = string.IsNullOrWhiteSpace(doc.FileName) ? "(nicht gespeichert)" : doc.FileName;
-                    LogHelper.LogInfo($"[FALLBACK] 🔍 Aktives Dokument: Title='{title}', File='{file}'");
+                    LogHelper.LogInfo($"[FALLBACK] Ã°Å¸â€Â Aktives Dokument: Title='{title}', File='{file}'");
 
                     var subs = ScanSubModels(doc, ct, false);
 
                     foreach (var sm in subs)
                     {
-                        if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] ⏹️ Abgebrochen (CT)."); break; }
+                        if (ct.IsCancellationRequested) { LogHelper.LogInfo("[FALLBACK] Ã¢ÂÂ¹Ã¯Â¸Â Abgebrochen (CT)."); break; }
 
                         if (string.IsNullOrWhiteSpace(sm.CanonicalId))
-                            LogHelper.LogError("[FALLBACK] ℹ️ Keine CanonicalId verfügbar → Modell in Übersicht, aber nicht selektierbar.", "GetModelOverviewAsync");
+                            LogHelper.LogError("[FALLBACK] Ã¢â€žÂ¹Ã¯Â¸Â Keine CanonicalId verfÃƒÂ¼gbar Ã¢â€ â€™ Modell in ÃƒÅ“bersicht, aber nicht selektierbar.", "GetModelOverviewAsync");
 
                         dto.TotalElements += sm.Root?.Children?.Count() ?? 0;
                         dto.Models.Add(new ModelDetailDto
@@ -945,7 +951,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                     }
 
                     dto.ModelsCount = dto.Models.Count;
-                    LogHelper.LogInfo($"[FALLBACK] ✅ ModelsCount (aus dto.Models.Count) = {dto.ModelsCount}");
+                    LogHelper.LogInfo($"[FALLBACK] Ã¢Å“â€¦ ModelsCount (aus dto.Models.Count) = {dto.ModelsCount}");
                     LogHelper.LogSuccess($"[FALLBACK] get_model_overview: {dto.ModelsCount} Untermodell(e) gelistet.");
                 }
                 catch (Exception ex)
@@ -986,7 +992,7 @@ namespace waabe_navi_mcp_server.Services.Backends
 
         public Task<ElementCountDto> GetPropertyDistributionByCategoryAsync(CancellationToken ct)
         {
-            const string TAG = "[FALLBACK] GetPropertyDistributionByCategoryAsync / ID13453 (Model→Category→Property + Overview)";
+            const string TAG = "[FALLBACK] GetPropertyDistributionByCategoryAsync / ID13453 (ModelÃ¢â€ â€™CategoryÃ¢â€ â€™Property + Overview)";
             LogHelper.LogEvent($"{TAG} gestartet (Hinweis: 'category' wird ignoriert).");
 
             return UiThread.InvokeAsync(() =>
@@ -1018,7 +1024,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                     dto.details = RenderCategoryStatsAsJson(map);
                     dto.message = RenderCategoryStatsAsMarkdown(map);
 
-                    LogHelper.LogSuccess($"{TAG}: Gesamt gezählte Property-Werte = {total}");
+                    LogHelper.LogSuccess($"{TAG}: Gesamt gezÃƒÂ¤hlte Property-Werte = {total}");
                     return dto;
                 }
                 catch (Exception ex)
@@ -1088,7 +1094,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                             var disp = SafeNameOrDefault(r?.DisplayName, r?.ClassDisplayName, DEFAULT_UNNAMED);
                             return $"{disp}|cid:{cid}";
                         }));
-                        LogHelper.LogInfo($"[FALLBACK] get_element_count_by_category: Scope aktiv. {scopedRoots.Count} Modell-Root(s) selektiert → [{picked}]");
+                        LogHelper.LogInfo($"[FALLBACK] get_element_count_by_category: Scope aktiv. {scopedRoots.Count} Modell-Root(s) selektiert Ã¢â€ â€™ [{picked}]");
                     }
                     catch (Exception ex)
                     {
@@ -1100,7 +1106,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 else
                 {
-                    LogHelper.LogDebug("[FALLBACK] get_element_count_by_category: Scope='all' → gesamtes Dokument wird gezählt.", "GetElementCountByCategoryAsync");
+                    LogHelper.LogDebug("[FALLBACK] get_element_count_by_category: Scope='all' Ã¢â€ â€™ gesamtes Dokument wird gezÃƒÂ¤hlt.", "GetElementCountByCategoryAsync");
                 }
 
                 IEnumerable<ModelItem> sourceItems = restrictToModels
@@ -1119,7 +1125,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 {
                     dto.success = false;
                     dto.message = $"counting error: {ex.Message}";
-                    LogHelper.LogError($"[FALLBACK] get_element_count_by_category: Fehler während der Zählung: {ex}");
+                    LogHelper.LogError($"[FALLBACK] get_element_count_by_category: Fehler wÃƒÂ¤hrend der ZÃƒÂ¤hlung: {ex}");
                     return dto;
                 }
 
@@ -1134,7 +1140,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 else
                 {
-                    LogHelper.LogSuccess($"[FALLBACK] get_element_count_by_category: scope='{(restrictToModels ? scopeToken : "all")}', category='{category}' → count={count}, visited={visited}, Took={tookMs}ms");
+                    LogHelper.LogSuccess($"[FALLBACK] get_element_count_by_category: scope='{(restrictToModels ? scopeToken : "all")}', category='{category}' Ã¢â€ â€™ count={count}, visited={visited}, Took={tookMs}ms");
                 }
 
                 if (dto.count == 0)
@@ -1162,14 +1168,14 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                     if (canonical_id == null || canonical_id.Count == 0)
                     {
-                        LogHelper.LogWarning("[FALLBACK] apply_selection: Keine IDs übergeben. (Hinweis: Auswahl wird NICHT geleert – dafür clear_selection benutzen.)");
+                        LogHelper.LogWarning("[FALLBACK] apply_selection: Keine IDs ÃƒÂ¼bergeben. (Hinweis: Auswahl wird NICHT geleert Ã¢â‚¬â€œ dafÃƒÂ¼r clear_selection benutzen.)");
                         return resultList;
                     }
 
                     var items = ResolveItemsByCanonicalIds(doc, canonical_id);
                     if (items == null || items.Count == 0)
                     {
-                        LogHelper.LogWarning("[FALLBACK] apply_selection: Keine der IDs auflösbar/selektierbar.");
+                        LogHelper.LogWarning("[FALLBACK] apply_selection: Keine der IDs auflÃƒÂ¶sbar/selektierbar.");
                         return resultList;
                     }
 
@@ -1310,7 +1316,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                     dto.child_from_this_object = Get_NachfolgeRecursive_From_Item(item, 1);
                     dto.path_from_this_object = GetPathSteps(item, includeCanonical: true, reverse: true);
 
-                    LogHelper.LogSuccess($"{M}: OK für '{dto.canonical_id}'");
+                    LogHelper.LogSuccess($"{M}: OK fÃƒÂ¼r '{dto.canonical_id}'");
                     return dto;
                 }
                 catch (Exception ex)
@@ -1441,12 +1447,12 @@ namespace waabe_navi_mcp_server.Services.Backends
                 var totalIn = incoming.Count;
                 LogHelper.LogEvent($"Lookup: ResolveItemsByCanonicalIds gestartet. incomingIds={totalIn}");
 
-                if (doc == null) { LogHelper.LogWarning("Lookup: Abbruch – kein aktives Dokument."); return result; }
-                if (totalIn == 0) { LogHelper.LogWarning("Lookup: Abbruch – leere oder fehlende ID-Liste."); return result; }
+                if (doc == null) { LogHelper.LogWarning("Lookup: Abbruch Ã¢â‚¬â€œ kein aktives Dokument."); return result; }
+                if (totalIn == 0) { LogHelper.LogWarning("Lookup: Abbruch Ã¢â‚¬â€œ leere oder fehlende ID-Liste."); return result; }
 
                 var sw = Stopwatch.StartNew();
                 var idsInOrder = incoming.Where(id => !string.IsNullOrWhiteSpace(id)).ToList();
-                if (idsInOrder.Count == 0) { LogHelper.LogWarning("Lookup: Abbruch – alle übergebenen IDs sind leer/whitespace."); return result; }
+                if (idsInOrder.Count == 0) { LogHelper.LogWarning("Lookup: Abbruch Ã¢â‚¬â€œ alle ÃƒÂ¼bergebenen IDs sind leer/whitespace."); return result; }
 
                 var resolvedById = new Dictionary<string, List<ModelItem>>(StringComparer.OrdinalIgnoreCase);
                 var guidMap = new Dictionary<Guid, List<string>>();
@@ -1533,7 +1539,7 @@ namespace waabe_navi_mcp_server.Services.Backends
                 LogHelper.LogSuccess($"Lookup: Fertig. incoming={totalIn}, scanned={scanned}, uniqueResult={result.Count}, durationMs={sw.ElapsedMilliseconds}");
 
                 if (result.Count == 0 && (guidMap.Count + hashMap.Count) > 0)
-                    LogHelper.LogWarning("Lookup: Keine Treffer zu den übergebenen IDs gefunden.");
+                    LogHelper.LogWarning("Lookup: Keine Treffer zu den ÃƒÂ¼bergebenen IDs gefunden.");
 
                 return result;
             }
@@ -1550,7 +1556,7 @@ namespace waabe_navi_mcp_server.Services.Backends
             foreach (var mi in items)
                 if (mi != null) collection.Add(mi);
 
-            if (collection.Count == 0) { LogHelper.LogWarning("[SEL/APPLY] Keine Items übergeben.", "MCP"); return; }
+            if (collection.Count == 0) { LogHelper.LogWarning("[SEL/APPLY] Keine Items ÃƒÂ¼bergeben.", "MCP"); return; }
 
             if (!keepExistingSelection) doc.CurrentSelection.Clear();
 
@@ -1941,7 +1947,7 @@ namespace waabe_navi_mcp_server.Services.Backends
         private string RenderCategoryStatsAsMarkdown(Dictionary<string, Dictionary<string, Dictionary<string, int>>> perModel)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("📊 **Properties – Übersicht (pro Modell, Kategorie & Property)**");
+            sb.AppendLine("Ã°Å¸â€œÅ  **Properties Ã¢â‚¬â€œ ÃƒÅ“bersicht (pro Modell, Kategorie & Property)**");
             foreach (var modelKv in perModel)
             {
                 sb.AppendLine();
