@@ -407,7 +407,7 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                 var comparer = BuildValuePredicate(args.ValueFilter, args.IgnoreCase);
                 int added = 0;
-                int? max = args.MaxResults;
+                int? max = args.MaxResults ?? 200; // default cap to avoid MCP_Launcher timeout
 
                 foreach (var item in candidates)
                 {
@@ -1209,9 +1209,7 @@ namespace waabe_navi_mcp_server.Services.Backends
 
                     if (doc?.CurrentSelection != null)
                     {
-                        var state = ComApiBridge.State;
-                        if (state != null)
-                            state.CurrentSelection.SelectNone();
+                        doc.CurrentSelection.Clear();
                         LogHelper.LogSuccess($"[FALLBACK] clear_selection: cleared={affected}");
                     }
                     else

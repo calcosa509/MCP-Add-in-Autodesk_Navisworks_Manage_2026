@@ -8,6 +8,9 @@
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>8.0</LangVersion>
+<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+<Deterministic>false</Deterministic>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
@@ -25,7 +28,7 @@
 		<Optimize>true</Optimize>
 	</PropertyGroup>
 
-	<!-- ✅ DLLs Navisworks 2026 -->
+	<!-- DLLs Navisworks 2026 -->
 	<ItemGroup>
 		<Reference Include="Autodesk.Navisworks.Api">
 			<HintPath>C:\Program Files\Autodesk\Navisworks Manage 2026\Autodesk.Navisworks.Api.dll</HintPath>
@@ -61,19 +64,19 @@
 		</Reference>
 	</ItemGroup>
 
-	<!-- ✅ FIX: Microsoft.CSharp pour le support 'dynamic' -->
+	<!-- FIX: Microsoft.CSharp pour le support dynamic -->
 	<ItemGroup>
 		<Reference Include="Microsoft.CSharp" />
 	</ItemGroup>
 
-	<!-- ✅ Références projets -->
+	<!-- Références projets -->
 	<ItemGroup>
 		<ProjectReference Include="..\Waabe.Navisworks.Bridge\Waabe.Navisworks.Bridge.csproj" />
 		<ProjectReference Include="..\waabe_navi_shared\waabe_navi_shared.csproj" />
 		<ProjectReference Include="..\waabe_navi_mcp\waabe_navi.csproj" />
 	</ItemGroup>
 
-	<!-- ✅ NuGet -->
+	<!-- NuGet -->
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>

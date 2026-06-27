@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
 using System;
-using System.Linq;          // ✅ FIX: nécessaire pour .Count() sur ModelItemEnumerableCollection
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace Waabe.Navisworks.Bridge
 {
@@ -26,19 +26,17 @@ namespace Waabe.Navisworks.Bridge
                 _listener.Start();
                 _started = true;
 
-                ThreadPool.QueueUserWorkItem(_ =>
-                {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object _) {
                     while (_listener.IsListening)
                     {
                         try
                         {
                             var context = _listener.GetContext();
-                            ThreadPool.QueueUserWorkItem(
-                                state => HandleRequest((HttpListenerContext)state), context);
+                            ThreadPool.QueueUserWorkItem(new WaitCallback(HandleRequest), context);
                         }
                         catch { }
                     }
-                });
+                }));
             }
         }
 
@@ -48,33 +46,30 @@ namespace Waabe.Navisworks.Bridge
             {
                 if (!_started) return;
                 _started = false;
-                _listener?.Stop();
-                _listener?.Close();
+                if (_listener != null)
+                {
+                    _listener.Stop();
+                    _listener.Close();
+                }
             }
         }
 
-        private static void HandleRequest(HttpListenerContext context)
+        private static void HandleRequest(object state)
         {
+            HttpListenerContext context = (HttpListenerContext)state;
             try
             {
-                string path = context.Request.Url.AbsolutePath.ToLowerInvariant();
+                string path = context.Request.Url.AbsolutePath.ToLower();
                 string jsonResponse;
 
-                switch (path)
+                if (path == "/model/info")
+                    jsonResponse = GetModelInfo();
+                else if (path == "/model/items/count")
+                    jsonResponse = GetItemCount();
+                else
                 {
-                    case "/model/info":
-                        jsonResponse = GetModelInfo();
-                        break;
-
-                    case "/model/items/count":
-                        jsonResponse = GetItemCount();
-                        break;
-
-                    default:
-                        context.Response.StatusCode = 404;
-                        jsonResponse = JsonConvert.SerializeObject(
-                            new { error = "Endpoint inconnu", path = path });
-                        break;
+                    context.Response.StatusCode = 404;
+                    jsonResponse = "{\"error\":\"Endpoint inconnu\"}";
                 }
 
                 byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
@@ -96,43 +91,41 @@ namespace Waabe.Navisworks.Bridge
         {
             var doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
             if (doc == null)
-                return JsonConvert.SerializeObject(
-                    new { error = "Aucun document Navisworks actif" });
+                return "{\"error\":\"Aucun document Navisworks actif\"}";
 
-            return JsonConvert.SerializeObject(new
+            var data = new
             {
-                fileName = doc.FileName ?? "Untitled",
+                fileName = doc.FileName != null ? doc.FileName : "Untitled",
                 currentFileName = doc.CurrentFileName,
                 modelCount = doc.Models.Count,
-                timestamp = DateTime.UtcNow
-            });
+                timestamp = DateTime.UtcNow.ToString()
+            };
+
+            return JsonConvert.SerializeObject(data);
         }
 
         private static string GetItemCount()
         {
             var doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
             if (doc == null)
-                return JsonConvert.SerializeObject(
-                    new { error = "Aucun document Navisworks actif" });
+                return "{\"error\":\"Aucun document Navisworks actif\"}";
 
             long totalItems = 0;
-
             foreach (Autodesk.Navisworks.Api.Model model in doc.Models)
             {
-                if (model?.RootItem != null)
+                if (model != null && model.RootItem != null)
                 {
-                    // ✅ FIX: .Cast<ModelItem>().Count() via System.Linq
-                    totalItems += model.RootItem.DescendantsAndSelf
-                                       .Cast<Autodesk.Navisworks.Api.ModelItem>()
-                                       .Count();
+                    totalItems += model.RootItem.DescendantsAndSelf.Count();
                 }
             }
 
-            return JsonConvert.SerializeObject(new
+            var data = new
             {
                 totalItems = totalItems,
                 modelCount = doc.Models.Count
-            });
+            };
+
+            return JsonConvert.SerializeObject(data);
         }
     }
 }

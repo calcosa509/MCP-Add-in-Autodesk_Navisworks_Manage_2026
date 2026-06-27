@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,9 +98,8 @@ class Program
             new { name = "get_current_selection_snapshot", description = "Get the current selection in Navisworks", inputSchema = EmptySchema() },
             new { name = "clear_selection", description = "Clear the current selection in Navisworks", inputSchema = EmptySchema() },
             new { name = "get_element_count_by_category", description = "Count elements by category and scope", inputSchema = ObjectSchema(("category", "string"), ("scope", "string")) },
-            new { name = "get_property_distribution_by_category", description = "Get property distribution statistics", inputSchema = EmptySchema() },
-            new { name = "list_items_to_property", description = "List items matching a property/value filter", inputSchema = ObjectSchema(("category", "string"), ("property", "string")) },
-            new { name = "list_properties_for_item", description = "List all properties for a given item by canonical id", inputSchema = ObjectSchema(("item_id", "string")) },
+            new { name = "get_property_distribution_by_category", description = "Get property distribution statistics", inputSchema = ObjectSchema(("scope", "string")) },
+            new { name = "list_items_to_property", description = "List items matching a property/value filter", inputSchema = ObjectSchema(("category", "string"), ("property", "string"), ("scope", "string"), ("max_results", "string")) },
             new { name = "run_simple_clash", description = "Run a simple clash detection between two scopes", inputSchema = ObjectSchema(("scopeA", "string"), ("scopeB", "string")) },
         };
     }
