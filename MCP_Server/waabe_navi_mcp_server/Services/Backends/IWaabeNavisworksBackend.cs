@@ -1,4 +1,4 @@
-﻿// waabe_navi_mcpserver/Services/Backends/IWaabeNavisworksBackend.cs
+// waabe_navi_mcpserver/Services/Backends/IWaabeNavisworksBackend.cs
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,6 +68,9 @@ namespace waabe_navi_mcp_server.Services.Backends
         /// Runs a clash detection test between two scopes with the given tolerance.
         /// </summary>
         Task<ClashSummaryDto> RunClashAsync(ClashRunArgs args, CancellationToken ct);
-        
+        Task<ViewpointDto> SaveViewpointAsync(string name, CancellationToken ct);
+        Task<ViewpointListDto> ListViewpointsAsync(CancellationToken ct);
+        Task<ViewpointDto> ActivateViewpointAsync(string name, CancellationToken ct);
+        Task<HideElementsDto> HideElementsAsync(string scope, CancellationToken ct);
     }
 }

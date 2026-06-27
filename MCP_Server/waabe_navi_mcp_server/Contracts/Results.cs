@@ -1,4 +1,4 @@
-﻿// waabe_navi_mcp_server/Contracts/DtoContracts.cs
+// waabe_navi_mcp_server/Contracts/DtoContracts.cs
 using Autodesk.Navisworks.Api;
 using System;
 using System.Collections.Generic;
@@ -245,5 +245,23 @@ namespace waabe_navi_mcp_server.Contracts
     public sealed class ApplyResultDto : AI_MassageDto
     {
         public int affected { get; set; }
+    }
+
+    public sealed class ViewpointDto : AI_MassageDto
+    {
+        public string name { get; set; } = "";
+        public int index { get; set; }
+    }
+
+    public sealed class ViewpointListDto : AI_MassageDto
+    {
+        public int count { get; set; }
+        public System.Collections.Generic.List<ViewpointDto> viewpoints { get; set; } = new System.Collections.Generic.List<ViewpointDto>();
+    }
+
+    public sealed class HideElementsDto : AI_MassageDto
+    {
+        public int hidden_count { get; set; }
+        public string scope { get; set; } = "";
     }
 }

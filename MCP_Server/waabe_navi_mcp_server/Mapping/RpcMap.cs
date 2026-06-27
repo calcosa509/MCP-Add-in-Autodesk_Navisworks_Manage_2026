@@ -1,4 +1,4 @@
-﻿// waabe_navi_mcp_server/Mapping/RpcMap.cs
+// waabe_navi_mcp_server/Mapping/RpcMap.cs
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,6 +86,14 @@ namespace waabe_navi_mcp_server.Mapping
 
             // ---------- Clash ----------
             routes["run_simple_clash"] = wrap(clash.RunSimpleClash);
+
+            // ---------- Viewpoints ----------
+            routes["save_viewpoint"] = wrap(vis.SaveViewpoint);
+            routes["list_viewpoints"] = wrap(vis.ListViewpoints);
+            routes["activate_viewpoint"] = wrap(vis.ActivateViewpoint);
+
+            // ---------- Visibility ----------
+            routes["hide_elements"] = wrap(vis.HideElements);
 
             // ---------- System ----------
            // routes["ping"] = wrap(sys.Ping);

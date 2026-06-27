@@ -1,4 +1,4 @@
-﻿// waabe_navi_mcpserver/Services/Backends/ReflectionBackend.cs
+// waabe_navi_mcpserver/Services/Backends/ReflectionBackend.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,5 +219,15 @@ namespace waabe_navi_mcp_server.Services.Backends
                  fbUiPreferredCall: () => _fb.RunClashAsync(req, ct),
                  opName: nameof(RunClashAsync));
 
+        // ===== Viewpoints =====
+        public Task<ViewpointDto> SaveViewpointAsync(string name, CancellationToken ct)
+             => TryUiCall(fbCall: () => _fb.SaveViewpointAsync(name, ct), fbUiPreferredCall: () => _fb.SaveViewpointAsync(name, ct), opName: nameof(SaveViewpointAsync));
+        public Task<ViewpointListDto> ListViewpointsAsync(CancellationToken ct)
+             => TryUiCall(fbCall: () => _fb.ListViewpointsAsync(ct), fbUiPreferredCall: () => _fb.ListViewpointsAsync(ct), opName: nameof(ListViewpointsAsync));
+        public Task<ViewpointDto> ActivateViewpointAsync(string name, CancellationToken ct)
+             => TryUiCall(fbCall: () => _fb.ActivateViewpointAsync(name, ct), fbUiPreferredCall: () => _fb.ActivateViewpointAsync(name, ct), opName: nameof(ActivateViewpointAsync));
+        // ===== Visibility =====
+        public Task<HideElementsDto> HideElementsAsync(string scope, CancellationToken ct)
+             => TryUiCall(fbCall: () => _fb.HideElementsAsync(scope, ct), fbUiPreferredCall: () => _fb.HideElementsAsync(scope, ct), opName: nameof(HideElementsAsync));
     }
 }

@@ -36,7 +36,7 @@ class Program
 
             if (idToken == null) continue;
 
-            // ✅ FIX: l'id JSON-RPC peut être string ou int — on le garde tel quel
+            // âœ… FIX: l'id JSON-RPC peut Ãªtre string ou int â€” on le garde tel quel
             JToken id = idToken;
 
             string response;
@@ -88,7 +88,7 @@ class Program
         }
     }
 
-    // ✅ Liste des outils exposés à Claude — correspond aux routes réelles du serveur
+    // âœ… Liste des outils exposÃ©s Ã  Claude â€” correspond aux routes rÃ©elles du serveur
     static object[] BuildToolsList()
     {
         return new object[]
@@ -101,6 +101,10 @@ class Program
             new { name = "get_property_distribution_by_category", description = "Get property distribution statistics", inputSchema = ObjectSchema(("scope", "string")) },
             new { name = "list_items_to_property", description = "List items matching a property/value filter", inputSchema = ObjectSchema(("category", "string"), ("property", "string"), ("scope", "string"), ("max_results", "string")) },
             new { name = "run_simple_clash", description = "Run a simple clash detection between two scopes", inputSchema = ObjectSchema(("scopeA", "string"), ("scopeB", "string")) },
+            new { name = "save_viewpoint", description = "Save the current viewpoint with a name", inputSchema = ObjectSchema(("name", "string")) },
+            new { name = "list_viewpoints", description = "List all saved viewpoints in the document", inputSchema = EmptySchema() },
+            new { name = "activate_viewpoint", description = "Activate a saved viewpoint by name", inputSchema = ObjectSchema(("name", "string")) },
+            new { name = "hide_elements", description = "Hide elements by scope (canonical ID or model name)", inputSchema = ObjectSchema(("scope", "string")) },
         };
     }
 
@@ -123,7 +127,7 @@ class Program
         };
     }
 
-    // ✅ FIX: relaie réellement la requête vers le serveur HTTP WAABE sur le port 5050
+    // âœ… FIX: relaie rÃ©ellement la requÃªte vers le serveur HTTP WAABE sur le port 5050
     static string HandleToolCall(JToken id, JObject toolParams)
     {
         try
@@ -150,7 +154,7 @@ class Program
 
             string rpcJson = JsonConvert.SerializeObject(rpcRequest);
 
-            // ✅ Appel HTTP synchrone vers le bridge Navisworks
+            // âœ… Appel HTTP synchrone vers le bridge Navisworks
             var rpcResponseJson = CallNavisworksRpc(rpcJson).GetAwaiter().GetResult();
             var rpcResult = JObject.Parse(rpcResponseJson);
 
@@ -199,7 +203,7 @@ class Program
                 {
                     content = new[]
                     {
-                        new { type = "text", text = "Exception côté MCP_Launcher: " + ex.Message }
+                        new { type = "text", text = "Exception cÃ´tÃ© MCP_Launcher: " + ex.Message }
                     },
                     isError = true
                 }
