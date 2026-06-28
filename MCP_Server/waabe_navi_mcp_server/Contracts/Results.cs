@@ -264,4 +264,17 @@ namespace waabe_navi_mcp_server.Contracts
         public int hidden_count { get; set; }
         public string scope { get; set; } = "";
     }
+    public sealed class ClashModelPairDto
+    {
+        public string model_a { get; set; } = "";
+        public string model_b { get; set; } = "";
+        public int clash_count { get; set; }
+        public bool success { get; set; }
+    }
+    public sealed class ClashAllDto : AI_MassageDto
+    {
+        public int total_clashes { get; set; }
+        public int pairs_tested { get; set; }
+        public System.Collections.Generic.List<ClashModelPairDto> pairs { get; set; } = new System.Collections.Generic.List<ClashModelPairDto>();
+    }
 }

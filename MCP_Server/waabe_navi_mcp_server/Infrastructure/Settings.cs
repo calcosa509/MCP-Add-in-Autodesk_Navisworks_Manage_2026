@@ -1,4 +1,4 @@
-﻿namespace waabe_navi_mcp_server.Infrastructure
+namespace waabe_navi_mcp_server.Infrastructure
 {
     /// <summary>
     /// Central configuration settings for the MCP server.
@@ -11,7 +11,7 @@
         /// Default timeout (in milliseconds) for async operations such as queries and service calls.
         /// Increased to 60s to handle large models (50 000+ elements) without cancellation.
         /// </summary>
-        public const int DefaultTimeoutMs = 60000;
+        public const int DefaultTimeoutMs = 180000;
 
         /// <summary>
         /// Enables or disables the response cache globally.

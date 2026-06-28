@@ -9,7 +9,8 @@ class Program
 {
     private static readonly HttpClient _http = new HttpClient
     {
-        BaseAddress = new Uri("http://localhost:5050/")
+        BaseAddress = new Uri("http://localhost:5050/"),
+        Timeout = System.TimeSpan.FromSeconds(300)
     };
 
     static void Main(string[] args)
@@ -36,7 +37,7 @@ class Program
 
             if (idToken == null) continue;
 
-            // Ã¢Å“â€¦ FIX: l'id JSON-RPC peut ÃƒÂªtre string ou int Ã¢â‚¬â€ on le garde tel quel
+            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ FIX: l'id JSON-RPC peut ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªtre string ou int ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â on le garde tel quel
             JToken id = idToken;
 
             string response;
@@ -88,7 +89,7 @@ class Program
         }
     }
 
-    // Ã¢Å“â€¦ Liste des outils exposÃƒÂ©s ÃƒÂ  Claude Ã¢â‚¬â€ correspond aux routes rÃƒÂ©elles du serveur
+    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Liste des outils exposÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  Claude ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â correspond aux routes rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©elles du serveur
     static object[] BuildToolsList()
     {
         return new object[]
@@ -101,6 +102,7 @@ class Program
             new { name = "get_property_distribution_by_category", description = "Get property distribution statistics", inputSchema = ObjectSchema(("scope", "string")) },
             new { name = "list_items_to_property", description = "List items matching a property/value filter", inputSchema = ObjectSchema(("category", "string"), ("property", "string"), ("scope", "string"), ("max_results", "string")) },
             new { name = "run_simple_clash", description = "Run a simple clash detection between two scopes", inputSchema = ObjectSchema(("scopeA", "string"), ("scopeB", "string")) },
+            new { name = "run_clash_all_models", description = "Run clash detection between all loaded models and return a consolidated report", inputSchema = EmptySchema() },
             new { name = "save_viewpoint", description = "Save the current viewpoint with a name", inputSchema = ObjectSchema(("name", "string")) },
             new { name = "list_viewpoints", description = "List all saved viewpoints in the document", inputSchema = EmptySchema() },
             new { name = "activate_viewpoint", description = "Activate a saved viewpoint by name", inputSchema = ObjectSchema(("name", "string")) },
@@ -128,7 +130,7 @@ class Program
         };
     }
 
-    // Ã¢Å“â€¦ FIX: relaie rÃƒÂ©ellement la requÃƒÂªte vers le serveur HTTP WAABE sur le port 5050
+    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ FIX: relaie rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ellement la requÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªte vers le serveur HTTP WAABE sur le port 5050
     static string HandleToolCall(JToken id, JObject toolParams)
     {
         try
@@ -155,7 +157,7 @@ class Program
 
             string rpcJson = JsonConvert.SerializeObject(rpcRequest);
 
-            // Ã¢Å“â€¦ Appel HTTP synchrone vers le bridge Navisworks
+            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Appel HTTP synchrone vers le bridge Navisworks
             var rpcResponseJson = CallNavisworksRpc(rpcJson).GetAwaiter().GetResult();
             var rpcResult = JObject.Parse(rpcResponseJson);
 
@@ -204,7 +206,7 @@ class Program
                 {
                     content = new[]
                     {
-                        new { type = "text", text = "Exception cÃƒÂ´tÃƒÂ© MCP_Launcher: " + ex.Message }
+                        new { type = "text", text = "Exception cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â´tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© MCP_Launcher: " + ex.Message }
                     },
                     isError = true
                 }
