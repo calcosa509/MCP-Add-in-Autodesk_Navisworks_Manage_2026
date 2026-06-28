@@ -15,18 +15,18 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
-	</PropertyGroup>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks></PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == ('Debug|Any CPU')">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
-	</PropertyGroup>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks></PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == ('Release|Any CPU')">
 		<DebugType>pdbonly</DebugType>
 		<Optimize>true</Optimize>
-	</PropertyGroup>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks></PropertyGroup>
 
 	<!-- DLLs Navisworks 2026 -->
 	<ItemGroup>
@@ -69,7 +69,7 @@
 		<Reference Include="Microsoft.CSharp" />
 	</ItemGroup>
 
-	<!-- Références projets -->
+	<!-- RÃƒÆ’Ã‚Â©fÃƒÆ’Ã‚Â©rences projets -->
 	<ItemGroup>
 		<ProjectReference Include="..\Waabe.Navisworks.Bridge\Waabe.Navisworks.Bridge.csproj" />
 		<ProjectReference Include="..\waabe_navi_shared\waabe_navi_shared.csproj" />
