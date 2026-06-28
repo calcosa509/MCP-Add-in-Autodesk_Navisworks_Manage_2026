@@ -36,7 +36,7 @@ class Program
 
             if (idToken == null) continue;
 
-            // âœ… FIX: l'id JSON-RPC peut Ãªtre string ou int â€” on le garde tel quel
+            // Ã¢Å“â€¦ FIX: l'id JSON-RPC peut ÃƒÂªtre string ou int Ã¢â‚¬â€ on le garde tel quel
             JToken id = idToken;
 
             string response;
@@ -88,7 +88,7 @@ class Program
         }
     }
 
-    // âœ… Liste des outils exposÃ©s Ã  Claude â€” correspond aux routes rÃ©elles du serveur
+    // Ã¢Å“â€¦ Liste des outils exposÃƒÂ©s ÃƒÂ  Claude Ã¢â‚¬â€ correspond aux routes rÃƒÂ©elles du serveur
     static object[] BuildToolsList()
     {
         return new object[]
@@ -105,6 +105,7 @@ class Program
             new { name = "list_viewpoints", description = "List all saved viewpoints in the document", inputSchema = EmptySchema() },
             new { name = "activate_viewpoint", description = "Activate a saved viewpoint by name", inputSchema = ObjectSchema(("name", "string")) },
             new { name = "hide_elements", description = "Hide elements by scope (canonical ID or model name)", inputSchema = ObjectSchema(("scope", "string")) },
+            new { name = "show_elements", description = "Show (unhide) elements by scope (canonical ID or model name)", inputSchema = ObjectSchema(("scope", "string")) },
         };
     }
 
@@ -127,7 +128,7 @@ class Program
         };
     }
 
-    // âœ… FIX: relaie rÃ©ellement la requÃªte vers le serveur HTTP WAABE sur le port 5050
+    // Ã¢Å“â€¦ FIX: relaie rÃƒÂ©ellement la requÃƒÂªte vers le serveur HTTP WAABE sur le port 5050
     static string HandleToolCall(JToken id, JObject toolParams)
     {
         try
@@ -154,7 +155,7 @@ class Program
 
             string rpcJson = JsonConvert.SerializeObject(rpcRequest);
 
-            // âœ… Appel HTTP synchrone vers le bridge Navisworks
+            // Ã¢Å“â€¦ Appel HTTP synchrone vers le bridge Navisworks
             var rpcResponseJson = CallNavisworksRpc(rpcJson).GetAwaiter().GetResult();
             var rpcResult = JObject.Parse(rpcResponseJson);
 
@@ -203,7 +204,7 @@ class Program
                 {
                     content = new[]
                     {
-                        new { type = "text", text = "Exception cÃ´tÃ© MCP_Launcher: " + ex.Message }
+                        new { type = "text", text = "Exception cÃƒÂ´tÃƒÂ© MCP_Launcher: " + ex.Message }
                     },
                     isError = true
                 }

@@ -59,12 +59,12 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.LogWarning($"[ReflectionBackend::{opName}] UI-path failed → fallback. {ex.Message}");
+                    LogHelper.LogWarning($"[ReflectionBackend::{opName}] UI-path failed Ã¢â€ â€™ fallback. {ex.Message}");
                 }
             }
             else
             {
-                LogHelper.LogDebug($"[ReflectionBackend::{opName}] UiThread not initialized → fallback.");
+                LogHelper.LogDebug($"[ReflectionBackend::{opName}] UiThread not initialized Ã¢â€ â€™ fallback.");
             }
 
              
@@ -229,5 +229,7 @@ namespace waabe_navi_mcp_server.Services.Backends
         // ===== Visibility =====
         public Task<HideElementsDto> HideElementsAsync(string scope, CancellationToken ct)
              => TryUiCall(fbCall: () => _fb.HideElementsAsync(scope, ct), fbUiPreferredCall: () => _fb.HideElementsAsync(scope, ct), opName: nameof(HideElementsAsync));
+        public Task<HideElementsDto> ShowElementsAsync(string scope, CancellationToken ct)
+             => TryUiCall(fbCall: () => _fb.ShowElementsAsync(scope, ct), fbUiPreferredCall: () => _fb.ShowElementsAsync(scope, ct), opName: nameof(ShowElementsAsync));
     }
 }

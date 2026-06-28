@@ -72,5 +72,6 @@ namespace waabe_navi_mcp_server.Services.Backends
         Task<ViewpointListDto> ListViewpointsAsync(CancellationToken ct);
         Task<ViewpointDto> ActivateViewpointAsync(string name, CancellationToken ct);
         Task<HideElementsDto> HideElementsAsync(string scope, CancellationToken ct);
+        Task<HideElementsDto> ShowElementsAsync(string scope, CancellationToken ct);
     }
 }

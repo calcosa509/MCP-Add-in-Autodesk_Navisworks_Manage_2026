@@ -15,7 +15,7 @@ namespace waabe_navi_mcp_server.Controllers
         {
             return Wrap(() => {
                 var name = (req.@params as Newtonsoft.Json.Linq.JObject)?["name"]?.ToString() ?? "";
-                var ct = new System.Threading.CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
                 var dto = BackendResolver.Instance.SaveViewpointAsync(name, ct).GetAwaiter().GetResult();
                 return RpcResponse<ViewpointDto>.Success(dto);
             });
@@ -23,7 +23,7 @@ namespace waabe_navi_mcp_server.Controllers
         public object ListViewpoints(RpcRequest req)
         {
             return Wrap(() => {
-                var ct = new System.Threading.CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
                 var dto = BackendResolver.Instance.ListViewpointsAsync(ct).GetAwaiter().GetResult();
                 return RpcResponse<ViewpointListDto>.Success(dto);
             });
@@ -32,7 +32,7 @@ namespace waabe_navi_mcp_server.Controllers
         {
             return Wrap(() => {
                 var name = (req.@params as Newtonsoft.Json.Linq.JObject)?["name"]?.ToString() ?? "";
-                var ct = new System.Threading.CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
                 var dto = BackendResolver.Instance.ActivateViewpointAsync(name, ct).GetAwaiter().GetResult();
                 return RpcResponse<ViewpointDto>.Success(dto);
             });
@@ -41,8 +41,17 @@ namespace waabe_navi_mcp_server.Controllers
         {
             return Wrap(() => {
                 var scope = (req.@params as Newtonsoft.Json.Linq.JObject)?["scope"]?.ToString() ?? "all";
-                var ct = new System.Threading.CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
                 var dto = BackendResolver.Instance.HideElementsAsync(scope, ct).GetAwaiter().GetResult();
+                return RpcResponse<HideElementsDto>.Success(dto);
+            });
+        }
+        public object ShowElements(RpcRequest req)
+        {
+            return Wrap(() => {
+                var scope = (req.@params as Newtonsoft.Json.Linq.JObject)?["scope"]?.ToString() ?? "all";
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var dto = BackendResolver.Instance.ShowElementsAsync(scope, ct).GetAwaiter().GetResult();
                 return RpcResponse<HideElementsDto>.Success(dto);
             });
         }

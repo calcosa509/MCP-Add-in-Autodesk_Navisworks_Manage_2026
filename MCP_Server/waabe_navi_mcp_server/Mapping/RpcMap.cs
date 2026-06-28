@@ -10,15 +10,15 @@ using waabe_navi_mcp_server.Telemetry;
 namespace waabe_navi_mcp_server.Mapping
 {
     /// <summary>
-    /// Central mapping of RPC method names → controller handlers.
+    /// Central mapping of RPC method names â†’ controller handlers.
     /// - Defines which controller methods are exposed as RPC endpoints.
     /// - Provides helper methods to build and register route dictionaries.
     /// - Attaches runtime metrics (execution time, request ID) to responses.
     ///
     /// Public methods:
-    /// - BuildRoutes() → returns all routes as dictionary (not registered).
-    /// - Register(Dictionary) → registers routes into an existing dictionary.
-    /// - Register(RpcRouter) → convenience overload for registering directly on a router.
+    /// - BuildRoutes() â†’ returns all routes as dictionary (not registered).
+    /// - Register(Dictionary) â†’ registers routes into an existing dictionary.
+    /// - Register(RpcRouter) â†’ convenience overload for registering directly on a router.
     /// </summary>
     public static class RpcMap
     {
@@ -94,6 +94,7 @@ namespace waabe_navi_mcp_server.Mapping
 
             // ---------- Visibility ----------
             routes["hide_elements"] = wrap(vis.HideElements);
+            routes["show_elements"] = wrap(vis.ShowElements);
 
             // ---------- System ----------
            // routes["ping"] = wrap(sys.Ping);
@@ -108,7 +109,7 @@ namespace waabe_navi_mcp_server.Mapping
         /// - Overwrites any existing handlers with the same key.
         /// - Calls BuildRoutes() internally.
         /// </summary>
-        /// <param name="routes">Dictionary of routes (method → handler).</param>
+        /// <param name="routes">Dictionary of routes (method â†’ handler).</param>
         public static void Register(Dictionary<string, Func<RpcRequest, object>> routes)
         {
             var map = BuildRoutes();
