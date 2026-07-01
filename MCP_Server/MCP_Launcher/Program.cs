@@ -37,7 +37,7 @@ class Program
 
             if (idToken == null) continue;
 
-            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ FIX: l'id JSON-RPC peut ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªtre string ou int ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â on le garde tel quel
+            // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ FIX: l'id JSON-RPC peut ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âªtre string ou int ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â on le garde tel quel
             JToken id = idToken;
 
             string response;
@@ -89,7 +89,7 @@ class Program
         }
     }
 
-    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Liste des outils exposÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  Claude ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â correspond aux routes rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©elles du serveur
+    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Liste des outils exposÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©s ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â  Claude ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â correspond aux routes rÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©elles du serveur
     static object[] BuildToolsList()
     {
         return new object[]
@@ -99,6 +99,7 @@ class Program
             new { name = "get_current_selection_snapshot", description = "Get the current selection in Navisworks", inputSchema = EmptySchema() },
             new { name = "clear_selection", description = "Clear the current selection in Navisworks", inputSchema = EmptySchema() },
             new { name = "get_element_count_by_category", description = "Count elements by category and scope", inputSchema = ObjectSchema(("category", "string"), ("scope", "string")) },
+            new { name = "list_properties_for_item", description = "Get all properties of a single element by its canonical ID", inputSchema = ObjectSchema(("item_id", "string")) },
             new { name = "get_property_distribution_by_category", description = "Get property distribution statistics", inputSchema = ObjectSchema(("scope", "string")) },
             new { name = "list_items_to_property", description = "List items matching a property/value filter", inputSchema = ObjectSchema(("category", "string"), ("property", "string"), ("scope", "string"), ("max_results", "string")) },
             new { name = "run_simple_clash", description = "Run a simple clash detection between two scopes", inputSchema = ObjectSchema(("scopeA", "string"), ("scopeB", "string")) },
@@ -130,7 +131,7 @@ class Program
         };
     }
 
-    // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ FIX: relaie rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ellement la requÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âªte vers le serveur HTTP WAABE sur le port 5050
+    // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ FIX: relaie rÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ellement la requÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âªte vers le serveur HTTP WAABE sur le port 5050
     static string HandleToolCall(JToken id, JObject toolParams)
     {
         try
@@ -157,7 +158,7 @@ class Program
 
             string rpcJson = JsonConvert.SerializeObject(rpcRequest);
 
-            // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ Appel HTTP synchrone vers le bridge Navisworks
+            // ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ Appel HTTP synchrone vers le bridge Navisworks
             var rpcResponseJson = CallNavisworksRpc(rpcJson).GetAwaiter().GetResult();
             var rpcResult = JObject.Parse(rpcResponseJson);
 
@@ -206,7 +207,7 @@ class Program
                 {
                     content = new[]
                     {
-                        new { type = "text", text = "Exception cÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â´tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© MCP_Launcher: " + ex.Message }
+                        new { type = "text", text = "Exception cÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â´tÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© MCP_Launcher: " + ex.Message }
                     },
                     isError = true
                 }
