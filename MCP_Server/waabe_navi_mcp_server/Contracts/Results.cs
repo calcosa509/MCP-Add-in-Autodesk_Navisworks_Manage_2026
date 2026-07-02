@@ -284,4 +284,14 @@ namespace waabe_navi_mcp_server.Contracts
         public int width { get; set; }
         public int height { get; set; }
     }
+    public sealed class ModelReportDto : AI_MassageDto
+    {
+        public string document_title { get; set; } = "";
+        public int models_count { get; set; }
+        public int total_elements { get; set; }
+        public System.Collections.Generic.List<ModelDetailDto> models { get; set; } = new System.Collections.Generic.List<ModelDetailDto>();
+        public ClashAllDto clash_report { get; set; }
+        public ViewpointListDto viewpoints { get; set; }
+        public string generated_at { get; set; } = "";
+    }
 }
