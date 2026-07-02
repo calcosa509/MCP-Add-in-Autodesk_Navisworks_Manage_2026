@@ -55,5 +55,16 @@ namespace waabe_navi_mcp_server.Controllers
                 return RpcResponse<HideElementsDto>.Success(dto);
             });
         }
+        public object ExportCurrentView(RpcRequest req)
+        {
+            return Wrap(() => {
+                var p = req.@params as Newtonsoft.Json.Linq.JObject;
+                int w = p?["width"] != null ? (int)p["width"] : 1280;
+                int h = p?["height"] != null ? (int)p["height"] : 720;
+                var ct = new CancellationTokenSource(Settings.DefaultTimeoutMs).Token;
+                var dto = BackendResolver.Instance.ExportCurrentViewAsync(w, h, ct).GetAwaiter().GetResult();
+                return RpcResponse<ExportViewDto>.Success(dto);
+            });
+        }
     }
 }

@@ -277,4 +277,11 @@ namespace waabe_navi_mcp_server.Contracts
         public int pairs_tested { get; set; }
         public System.Collections.Generic.List<ClashModelPairDto> pairs { get; set; } = new System.Collections.Generic.List<ClashModelPairDto>();
     }
+    public sealed class ExportViewDto : AI_MassageDto
+    {
+        public string file_path { get; set; } = "";
+        public string base64_image { get; set; } = "";
+        public int width { get; set; }
+        public int height { get; set; }
+    }
 }
