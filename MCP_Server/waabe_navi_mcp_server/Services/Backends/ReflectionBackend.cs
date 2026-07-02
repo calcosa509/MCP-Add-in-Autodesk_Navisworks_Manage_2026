@@ -59,12 +59,12 @@ namespace waabe_navi_mcp_server.Services.Backends
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.LogWarning($"[ReflectionBackend::{opName}] UI-path failed ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ fallback. {ex.Message}");
+                    LogHelper.LogWarning($"[ReflectionBackend::{opName}] UI-path failed ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ fallback. {ex.Message}");
                 }
             }
             else
             {
-                LogHelper.LogDebug($"[ReflectionBackend::{opName}] UiThread not initialized ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ fallback.");
+                LogHelper.LogDebug($"[ReflectionBackend::{opName}] UiThread not initialized ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ fallback.");
             }
 
              
@@ -233,5 +233,6 @@ namespace waabe_navi_mcp_server.Services.Backends
              => TryUiCall(fbCall: () => _fb.ShowElementsAsync(scope, ct), fbUiPreferredCall: () => _fb.ShowElementsAsync(scope, ct), opName: nameof(ShowElementsAsync));
         public Task<ExportViewDto> ExportCurrentViewAsync(int width, int height, CancellationToken ct)
              => TryUiCall(fbCall: () => _fb.ExportCurrentViewAsync(width, height, ct), fbUiPreferredCall: () => _fb.ExportCurrentViewAsync(width, height, ct), opName: nameof(ExportCurrentViewAsync));
+        public Task<TimelinerReportDto> GetTimelinerTasksAsync(CancellationToken ct) => TryUiCall(fbCall: () => _fb.GetTimelinerTasksAsync(ct), fbUiPreferredCall: () => _fb.GetTimelinerTasksAsync(ct), opName: nameof(GetTimelinerTasksAsync));
     }
 }

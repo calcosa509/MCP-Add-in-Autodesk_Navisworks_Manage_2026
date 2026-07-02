@@ -294,4 +294,25 @@ namespace waabe_navi_mcp_server.Contracts
         public ViewpointListDto viewpoints { get; set; }
         public string generated_at { get; set; } = "";
     }
+    public sealed class TimelinerTaskDto
+    {
+        public string display_name { get; set; } = "";
+        public string display_id { get; set; } = "";
+        public string task_status { get; set; } = "";
+        public string planned_start { get; set; } = "";
+        public string planned_end { get; set; } = "";
+        public string
+actual_start { get; set; } = "";
+        public string actual_end { get; set; } = "";
+        public double? progress_percent { get; set; }
+        public bool is_group { get; set; }
+        public int children_count { get; set; }
+        public System.Collections.Generic.List<TimelinerTaskDto> children { get; set; } = new System.Collections.Generic.List<TimelinerTaskDto>();
+    }
+    public sealed class TimelinerReportDto : AI_MassageDto
+    {
+        public int total_tasks { get; set; }
+        public string simulation_status { get; set; } = "";
+        public System.Collections.Generic.List<TimelinerTaskDto> tasks { get; set; } = new System.Collections.Generic.List<TimelinerTaskDto>();
+    }
 }

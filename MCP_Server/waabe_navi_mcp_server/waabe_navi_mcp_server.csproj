@@ -29,7 +29,11 @@
 	</PropertyGroup>
 
 	<!-- DLLs Navisworks 2026 -->
-	<ItemGroup>
+        <ItemGroup>
+                <Reference Include="Autodesk.Navisworks.Timeliner">
+                        <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2026\Autodesk.Navisworks.Timeliner.dll</HintPath>
+                        <Private>false</Private>
+                </Reference>
 		<Reference Include="Autodesk.Navisworks.Api">
 			<HintPath>C:\Program Files\Autodesk\Navisworks Manage 2026\Autodesk.Navisworks.Api.dll</HintPath>
 			<Private>false</Private>
@@ -69,7 +73,7 @@
 		<Reference Include="Microsoft.CSharp" />
 	</ItemGroup>
 
-	<!-- Références projets -->
+	<!-- RÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rences projets -->
 	<ItemGroup>
 		<ProjectReference Include="..\Waabe.Navisworks.Bridge\Waabe.Navisworks.Bridge.csproj" />
 		<ProjectReference Include="..\waabe_navi_shared\waabe_navi_shared.csproj" />

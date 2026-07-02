@@ -10,15 +10,15 @@ using waabe_navi_mcp_server.Telemetry;
 namespace waabe_navi_mcp_server.Mapping
 {
     /// <summary>
-    /// Central mapping of RPC method names ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ controller handlers.
+    /// Central mapping of RPC method names ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ controller handlers.
     /// - Defines which controller methods are exposed as RPC endpoints.
     /// - Provides helper methods to build and register route dictionaries.
     /// - Attaches runtime metrics (execution time, request ID) to responses.
     ///
     /// Public methods:
-    /// - BuildRoutes() ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ returns all routes as dictionary (not registered).
-    /// - Register(Dictionary) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ registers routes into an existing dictionary.
-    /// - Register(RpcRouter) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ convenience overload for registering directly on a router.
+    /// - BuildRoutes() ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ returns all routes as dictionary (not registered).
+    /// - Register(Dictionary) ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ registers routes into an existing dictionary.
+    /// - Register(RpcRouter) ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ convenience overload for registering directly on a router.
     /// </summary>
     public static class RpcMap
     {
@@ -43,7 +43,7 @@ namespace waabe_navi_mcp_server.Mapping
             var exp = new ExportController();
             var sys = new SystemController();
             var clash = new ClashController();
-            var report = new ReportController();
+            var report = new ReportController(); var timeliner = new TimelinerController();
 
             // Wrapper: measure runtime and attach meta info to RpcResponse
             Func<Func<RpcRequest, object>, Func<RpcRequest, object>> wrap = (handler) => (req) =>
@@ -87,7 +87,7 @@ namespace waabe_navi_mcp_server.Mapping
 
             // ---------- Clash ----------
             routes["run_simple_clash"] = wrap(clash.RunSimpleClash);
-            routes["generate_model_report"] = wrap(report.GenerateModelReport);
+            routes["get_timeliner_tasks"] = wrap(timeliner.GetTimelinerTasks); routes["generate_model_report"] = wrap(report.GenerateModelReport);
             routes["run_clash_all_models"] = wrap(clash.RunClashAllModels);
 
             // ---------- Viewpoints ----------
@@ -113,7 +113,7 @@ namespace waabe_navi_mcp_server.Mapping
         /// - Overwrites any existing handlers with the same key.
         /// - Calls BuildRoutes() internally.
         /// </summary>
-        /// <param name="routes">Dictionary of routes (method ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ handler).</param>
+        /// <param name="routes">Dictionary of routes (method ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ handler).</param>
         public static void Register(Dictionary<string, Func<RpcRequest, object>> routes)
         {
             var map = BuildRoutes();

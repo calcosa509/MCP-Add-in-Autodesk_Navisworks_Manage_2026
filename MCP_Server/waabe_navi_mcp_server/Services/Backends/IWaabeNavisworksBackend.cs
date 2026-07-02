@@ -74,5 +74,6 @@ namespace waabe_navi_mcp_server.Services.Backends
         Task<HideElementsDto> HideElementsAsync(string scope, CancellationToken ct);
         Task<HideElementsDto> ShowElementsAsync(string scope, CancellationToken ct);
         Task<ExportViewDto> ExportCurrentViewAsync(int width, int height, CancellationToken ct);
+        Task<TimelinerReportDto> GetTimelinerTasksAsync(CancellationToken ct);
     }
 }
